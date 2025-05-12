@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+/*import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAxios from '../utilis/useAxios';
 import Swal from 'sweetalert2';
@@ -43,4 +43,63 @@ const HospitalDetail = () => {
     );
 };
 
+export default HospitalDetail;*/
+
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useAxios from '../utilis/useAxios';
+import Swal from 'sweetalert2';
+import SearchBar from '../components/SearchBar'; // Reuse component
+
+const HospitalDetail = () => {
+    const { id } = useParams();
+    const axiosInstance = useAxios();
+    const [hospital, setHospital] = useState(null);
+    const [search, setSearch] = useState("");
+
+    useEffect(() => {
+        axiosInstance.get(`/hospitals/${id}/`)
+            .then(response => {
+                setHospital(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching hospital details:', error);
+                Swal.fire('Error!', 'Unable to fetch hospital details.', 'error');
+            });
+    }, [id]);
+
+    if (!hospital) return <p>Loading hospital details...</p>;
+
+    // Optionally filter inventory if search matches blood group or component
+    const filteredInventory = hospital.inventory.filter(item =>
+        item.blood_group.toLowerCase().includes(search.toLowerCase()) ||
+        item.blood_component.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return (
+        <div className="search-container">
+            <SearchBar search={search} setSearch={setSearch} />
+
+            <h2>{hospital.name}</h2>
+            <p><strong>Address:</strong> {hospital.address}</p>
+            <p><strong>Phone:</strong> {hospital.phone}</p>
+
+            <h3>Blood Inventory</h3>
+            {filteredInventory.length === 0 ? (
+                <p>No blood stock available.</p>
+            ) : (
+                <ul>
+                    {filteredInventory.map((item, index) => (
+                        <li key={index}>
+                            Blood Group: {item.blood_group} | Component: {item.blood_component} | Quantity: {item.quantity} | Price: {item.price}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+};
+
 export default HospitalDetail;
+
+

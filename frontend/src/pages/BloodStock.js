@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../utilis/useAxios';
 import Swal from 'sweetalert2';
+import "../styles/Donor.css";
 
 const BloodStock = () => {
     const api = useAxios();
@@ -140,7 +141,7 @@ const BloodStock = () => {
             <h2>Blood Stock Management</h2>
 
             {/* Add or Edit Blood Stock Form */}
-            <form onSubmit={isEditing ? handleUpdateStock : handleAddStock}>
+            <form onSubmit={isEditing ? handleUpdateStock : handleAddStock} className='donor-form'>
                 <input type="text" name="donor_cnic" placeholder="Donor CNIC" value={newStock.donor_cnic} onChange={handleChange} required />
                 <input type="text" name="hospital_license" placeholder="Hospital License" value={newStock.hospital_license} onChange={handleChange} required />
 

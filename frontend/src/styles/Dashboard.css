@@ -67,7 +67,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px; /* Reduced gap between cards */
-    padding: 60px 100px; /* Increased left and right padding for outer margin */
+    padding: 190px 100px; /* Increased left and right padding for outer margin */
     box-sizing: border-box;
     justify-content: center; /* Ensures grid is centered if cards shrink */
   }

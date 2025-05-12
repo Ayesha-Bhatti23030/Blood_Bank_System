@@ -140,8 +140,8 @@ WSGI_APPLICATION = 'Blood_Donation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Blood_Bank',  # Replace with your PostgreSQL database name
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Replace with your PostgreSQL database name
         'USER': 'postgres',  # Replace with your PostgreSQL username
         'PASSWORD': 'POST***',  # Replace with your PostgreSQL password
         'HOST': 'localhost',  # Default is localhost, change if your database is hosted elsewhere
