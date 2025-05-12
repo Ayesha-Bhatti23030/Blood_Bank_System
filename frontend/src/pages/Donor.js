@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../utilis/useAxios';
 import Swal from 'sweetalert2';
+import "../styles/Donor.css";
 
 const Donor = () => {
     const api = useAxios();
@@ -139,7 +140,7 @@ const Donor = () => {
             <h2>Donor Management</h2>
 
             {/* Add Donor Form */}
-            <form onSubmit={isEditing ? handleUpdateDonor : handleAddDonor}>
+            <form onSubmit={isEditing ? handleUpdateDonor : handleAddDonor} className="donor-form">
                 <input
                     type="text"
                     name="cnic"

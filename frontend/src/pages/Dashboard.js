@@ -4,13 +4,9 @@ import AuthContext from "../context/AuthContext";
 import "../styles/Dashboard.css";
 import {
   FaTint,
-  FaBolt,
-  FaCertificate,
-  FaChartLine,
+  FaHandHoldingHeart,
   FaUsers,
-  FaProjectDiagram,
-  FaUserPlus,
-  FaThLarge,
+  FaBoxes,
 } from "react-icons/fa";
 
 const Dashboard = () => {
@@ -39,45 +35,25 @@ const Dashboard = () => {
 
       {/* Left-aligned card grid */}
       <div className="dashboard-grid">
-        <div className="card">
-          <FaTint className="card-icon" onClick={() => navigate("/search")} /> {/* Use navigate() here */}
+        <div className="card" onClick={() => navigate("/search")}>
+          <FaTint className="card-icon"/> {/* Use navigate() here */}
           <h3>Request Blood</h3>
           <p>Request required blood</p>
         </div>
-        <div className="card">
-          <FaBolt className="card-icon" />
-          <h3>Donors</h3>
-          <p>Donor info</p>
+        <div className="card" onClick={() => navigate("/donor")}>
+          <FaHandHoldingHeart className="card-icon" />
+          <h3>Manage Donors</h3>
+          <p>Add, delete or edit donor info</p>
         </div>
-        <div className="card">
-          <FaCertificate className="card-icon" />
-          <h3>Certificates</h3>
-          <p>Print certificates</p>
-        </div>
-        <div className="card">
-          <FaChartLine className="card-icon" />
-          <h3>Stock</h3>
-          <p>Blood stock details</p>
-        </div>
-        <div className="card">
+        <div className="card" onClick={() => navigate("/attendant")}>
           <FaUsers className="card-icon" />
-          <h3>Requests</h3>
-          <p>Handle requests</p>
+          <h3>Manage Attendants</h3>
+          <p>Add, delete or edit attendant info</p>
         </div>
-        <div className="card">
-          <FaProjectDiagram className="card-icon" />
-          <h3>Projects</h3>
-          <p>Hospital reports</p>
-        </div>
-        <div className="card">
-          <FaUserPlus className="card-icon" />
-          <h3>Register Donor</h3>
-          <p>Add new donor</p>
-        </div>
-        <div className="card">
-          <FaThLarge className="card-icon" />
-          <h3>View All</h3>
-          <p>All records</p>
+        <div className="card" onClick={() => navigate("/bloodstock")}>
+          <FaBoxes className="card-icon" />
+          <h3>Blood Stock</h3>
+          <p>Add, delete or edit blood stock details</p>
         </div>
       </div>
     </div>

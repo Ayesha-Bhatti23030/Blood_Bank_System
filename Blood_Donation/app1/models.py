@@ -104,6 +104,14 @@ class User(AbstractUser):
     def profile(self):
        return HospitalProfile.objects.get(user=self)
 
+    @property
+    def license_image(self):
+        try:
+            # Accessing the license through the profile of the user
+            return self.profile.license.image.url if self.profile and self.profile.license and self.profile.license.image else None
+        except:
+            return None
+
 #    @property
 #    def profile(self):
 #        return getattr(self, 'hospitalprofile', None)
