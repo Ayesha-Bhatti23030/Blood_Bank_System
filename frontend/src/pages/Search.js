@@ -1,48 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useAxios from "../utilis/useAxios";
 import "../styles/Search.css";
-
-import aghaKhanImage from "../images/agha khan.png";
-import generalHospitalImage from "../images/liaquat hospital.png";
-import sunriseMedicalImage from "../images/jpmc.png";
-import redCrossClinicImage from "../images/fatimid.png";
-import healthFirstImage from "../images/nicvd.png";
-import wellCareCenterImage from "../images/husaini.png";
-import trustHospitalImage from "../images/chughtai.png";
-import medlineHospitalImage from "../images/pwa.png";
-
-const hospitals = [
-  { name: "Agha Khan Hospital", image: aghaKhanImage },
-  { name: "Liaquat National Hospital", image: generalHospitalImage },
-  { name: "Jinnah Medical Center", image: sunriseMedicalImage },
-  { name: "Fatimid Foundation Blood Bank", image: redCrossClinicImage },
-  { name: "National Institute of Cardivascular Disease (NICVD)", image: healthFirstImage },
-  { name: "Husaini Blood Bank", image: wellCareCenterImage },
-  { name: "Chughtai Blood Center", image: trustHospitalImage },
-  { name: "PWA Blood Bank", image: medlineHospitalImage },
-];
 
 const Search = () => {
   const [search, setSearch] = useState("");
+  const [hospitals, setHospitals] = useState([]);
+  const axiosInstance = useAxios();
+  const navigate = useNavigate();
 
-  const filtered = hospitals.filter((h) =>
-    h.name.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    axiosInstance.get('/hospitals/')
+      .then(response => {
+        setHospitals(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching hospitals", error);
+      });
+  }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && search.trim()) {
+      navigate("/results", { state: { query: search } });
+    }
+  };
 
   return (
     <div className="search-container">
       <input
         type="text"
-        placeholder="Search hospital/ blood"
+        placeholder="Search hospital/ blood group/ blood component"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
         className="search-bar"
       />
 
       <div className="hospital-grid">
-        {filtered.map((h, i) => (
-          <div className="hospital-card" key={i}>
-            <img src={h.image} alt={h.name} />
-            <h4>{h.name}</h4>
+        {hospitals.map((hospital) => (
+          <div className="hospital-card" key={hospital.id} onClick={() => navigate(`/hospitals/${hospital.id}`)}>
+            <img src={hospital.image ? `http://localhost:8000${hospital.image}` : null} alt={hospital.name} />
+
+            <h4>{hospital.name}</h4>
           </div>
         ))}
       </div>

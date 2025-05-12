@@ -125,6 +125,8 @@ class HospitalProfile(models.Model):
 
 class ValidLicense(models.Model):
     license_number = models.CharField(max_length=20, unique=True)
+    image = models.ImageField(upload_to='hospital_licenses/', blank=True, null=True)  # ✅ This will store images in media/hospital_licenses/
+
 
     def __str__(self):
         return self.license_number

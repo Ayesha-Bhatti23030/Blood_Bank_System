@@ -1,56 +1,53 @@
-import React, { useState, useEffect } from "react";
-import "../styles/Results.css";
+import React, { useEffect, useState } from "react";
+import "../styles/Results.css"; 
 import "../styles/Search.css";
 import { useLocation } from "react-router-dom";
-import useAxios from "../utilis/useAxios";
 import notFoundImage from "../images/notfound.png";
+import useAxios from "../utilis/useAxios"; // your custom axios hook
+import { Link } from "react-router-dom";
 
 const BloodResults = () => {
   const location = useLocation();
-  const query = location.state?.query || "";
+  const query = location.state?.query || ""; // A+, B+, etc.
   const [search, setSearch] = useState(query);
   const [bloodData, setBloodData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const axiosInstance = useAxios();
 
+  useEffect(() => {
   const fetchBloodData = async () => {
     try {
-      const params = new URLSearchParams();
+      const response = await axiosInstance.get(`/search/?query=${encodeURIComponent(search)}`);
+      const data = response.data;
 
-      if (search) {
-        params.append("blood_group", search); // You can enhance this to parse blood group/component separately
-      }
+      const combined = data.map(item => ({
+        hospital_id: item.hospital_id, 
+        hospital_name: item.hospital_name,
+        blood_group: item.blood_group,
+        blood_component: item.blood_component,
+        quantity: item.quantity,
+        price: item.price
+      }));
 
-      const response = await axiosInstance.get(`/blood-search/?${params.toString()}`);
-      setBloodData(response.data);
-      setFilteredData(response.data);
+      setBloodData(combined);
     } catch (error) {
       console.error("Error fetching blood data:", error);
-      setBloodData([]); // Reset on error
-      setFilteredData([]);
+      setBloodData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
+  if (search.trim() !== "") {
     fetchBloodData();
-    // eslint-disable-next-line
-  }, []);
+  }
+}, [search, axiosInstance]);
 
-  // Refetch if user changes the search term
-  useEffect(() => {
-    if (!search) {
-      setFilteredData(bloodData);
-      return;
-    }
-
-    const filtered = bloodData.filter((item) =>
-      `${item.hospital_name} ${item.blood_group} ${item.blood_component}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-
-    setFilteredData(filtered);
-  }, [search, bloodData]);
+  const filteredResults = bloodData.filter((item) =>
+    `${item.hospital_name} ${item.blood_group} ${item.blood_component}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   return (
     <div className="blood-results-container">
@@ -62,7 +59,9 @@ const BloodResults = () => {
         className="search-bar"
       />
 
-      {filteredData.length > 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : filteredResults.length > 0 ? (
         <table className="results-table">
           <thead>
             <tr>
@@ -75,9 +74,11 @@ const BloodResults = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((entry, index) => (
+            {filteredResults.map((entry, index) => (
               <tr key={index}>
-                <td>{entry.hospital_name}</td>
+                  <Link to={`/hospitals/${entry.hospital_id}`} className="hospital-link">
+                    {entry.hospital_name}
+                  </Link>
                 <td>{entry.blood_group}</td>
                 <td>{entry.blood_component}</td>
                 <td>{entry.quantity}</td>
