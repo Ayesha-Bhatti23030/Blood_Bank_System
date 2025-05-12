@@ -40,6 +40,9 @@ const BloodResults = () => {
 
   if (search.trim() !== "") {
     fetchBloodData();
+  } else {
+    setBloodData([]);
+    setLoading(false);
   }
 }, [search, axiosInstance]);
 
@@ -76,9 +79,11 @@ const BloodResults = () => {
           <tbody>
             {filteredResults.map((entry, index) => (
               <tr key={index}>
+                  <td>
                   <Link to={`/hospitals/${entry.hospital_id}`} className="hospital-link">
                     {entry.hospital_name}
                   </Link>
+                </td>
                 <td>{entry.blood_group}</td>
                 <td>{entry.blood_component}</td>
                 <td>{entry.quantity}</td>
