@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+db.sqlite3
+.env
+
+# Django migrations
+**/migrations/
+
+# Node
+node_modules/
+build/
+dist/
+
+# React build
+frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/

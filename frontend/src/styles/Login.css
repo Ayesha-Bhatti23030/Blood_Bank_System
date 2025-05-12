@@ -1,0 +1,121 @@
+body {
+  background-color: #f0f6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* ensures it takes full height */
+  margin: 0;
+
+
+}
+
+.signup-container,
+.login-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.signup-title,
+.login-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1px;
+}
+
+.signup-subtitle,
+.login-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.signup-form input,
+.signup-form select,
+.login-form input,
+.login-form select {
+  width: 100%;
+  padding: 14px 18px; /* Already equal on both sides */
+  margin-bottom: 20px;
+  border: none;
+  background-color: #f4f4f5;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box; /* This ensures padding doesn't overflow */
+}
+
+.signup-form input:focus,
+.signup-form select:focus,
+.login-form input:focus,
+.login-form select:focus {
+  outline: none;
+  border: 2px solid #000000;
+  background-color: #e8f0fe;
+}
+
+.signup-form input:not(:placeholder-shown),
+.signup-form select:not(:placeholder-shown),
+.login-form input:not(:placeholder-shown),
+.login-form select:not(:placeholder-shown) {
+  background-color: #e8f0fe;
+}
+
+
+
+.signup-form select,
+.login-form select {
+  color: #000;
+}
+
+.signup-button,
+.login-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #2149c5;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.signup-button:hover,
+.login-button:hover {
+  background-color: #1b39a1;
+}
+
+.signup-footer,
+.login-footer {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.signup-footer a,
+.login-footer a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.error-alert {
+  background-color: #fdecea;
+  color: #b91c1c;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+  font-weight: 500;
+  border: 1px solid #fca5a5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

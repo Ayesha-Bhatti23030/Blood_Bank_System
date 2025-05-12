@@ -1,0 +1,110 @@
+#root {
+    padding: 0 !important;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-container {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1E40AF;
+    color: white;
+    padding: 20px 60px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100px;
+  }
+  
+  .header-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .header-button {
+    background-color: white;
+    color: #1E40AF;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .header-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1E40AF;
+  }
+  
+  .card p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; /* Reduced gap between cards */
+    padding: 60px 100px; /* Increased left and right padding for outer margin */
+    box-sizing: border-box;
+    justify-content: center; /* Ensures grid is centered if cards shrink */
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: 0.3s ease;
+    height: 160px; /* Slightly smaller */
+    width: 90%; /* Make cards slightly narrower */
+    margin: 0 auto; /* Center each card horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .card-icon {
+    font-size: 32px;
+    color: #1E40AF;
+    margin-bottom: 10px;
+  }
+
+
+  .footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .footer-content p {
+    margin: 5px 0;
+  }
+  

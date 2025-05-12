@@ -1,0 +1,45 @@
+.blood-results-container {
+    padding: 20px 60px;
+    box-sizing: border-box;
+  }
+  
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    table-layout: fixed;
+  }
+  
+  .results-table th,
+  .results-table td {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .results-table th {
+    background-color: #1e40af;
+    color: white;
+  }
+  
+  .request-btn {
+    background-color: #1e40af;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .no-matches {
+    text-align: center;
+    margin-top: 60px;
+  }
+  
+  .no-results-img {
+    width: 250px;
+    margin-bottom: 20px;
+  }
