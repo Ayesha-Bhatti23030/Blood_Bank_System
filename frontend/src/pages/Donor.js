@@ -251,7 +251,7 @@ const Donor = () => {
                             <td>{donor.medication}</td>
                             <td>
                                 <button onClick={() => handleEditClick(donor)}>Edit</button>
-                                <button onClick={() => handleDeleteDonor(donor.id)}>Delete</button>
+                                <button onClick={() => handleDeleteDonor(donor.cnic)}>Delete</button>
                             </td>
                         </tr>
                     ))}

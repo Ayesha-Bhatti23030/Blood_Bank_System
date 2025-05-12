@@ -39,11 +39,18 @@ class BloodStockViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-        
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+
         if not serializer.is_valid():
             print("Validation Errors:", serializer.errors)  # This will print in your terminal
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Custom validation for hospital license ownership
+        hospital_license = serializer.validated_data.get('hospital_license')
+        if hospital_license and hospital_license.user != request.user:
+            error_message = "Hospital license does not belong to the logged-in user."
+            return Response({"hospital_license": [error_message]}, status=status.HTTP_400_BAD_REQUEST)
+
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -84,3 +84,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         HospitalProfile.objects.create(user=user, **profile_data)
 
         return user
+    
+
+class HospitalProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HospitalProfile
+        fields = ['name']  # Include the fields you want to send

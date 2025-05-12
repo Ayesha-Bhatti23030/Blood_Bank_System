@@ -40,16 +40,17 @@ def generate_uuid_str():
     return str(uuid.uuid4())
 
 class BloodStock(models.Model):
-    
     unique_identifier = models.CharField(
         max_length=100, 
-        default=generate_uuid_str,  # ✅ Use named function
+        default=generate_uuid_str,
         editable=False, 
         unique=True, 
         primary_key=True
     )
     donor_cnic = models.ForeignKey(Donor, on_delete=models.CASCADE)
-    hospital_license = models.ForeignKey('app1.HospitalProfile', on_delete=models.CASCADE,related_name='blood_inventory')
+    hospital_license = models.ForeignKey('app1.HospitalProfile', on_delete=models.CASCADE, related_name='blood_inventory')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+  
     blood_group = models.CharField(max_length=3, choices=BLOOD_TYPE_CHOICES, default='O+')
     blood_test_result = models.CharField(max_length=100)
     storage_location = models.CharField(max_length=100)
@@ -58,15 +59,19 @@ class BloodStock(models.Model):
     collection_date = models.DateField()
     expiry_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUSB_CHOICES, default='Active')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # 👈 Link to logged-in user
+
+    def clean(self):
+        # Check if hospital_license belongs to the same user
+        if self.hospital_license.user != self.user:
+            raise ValidationError("Hospital license does not belong to the logged-in user.")
 
     def save(self, *args, **kwargs):
-        # 1. Set expiry based on component shelf life
+        self.full_clean()  # This will call clean() and raise ValidationError if needed
+
         if not self.expiry_date:
             shelf_life_days = COMPONENT_SHELF_LIFE.get(self.blood_component, 42)
             self.expiry_date = self.collection_date + timedelta(days=shelf_life_days)
 
-        # 2. Set status based on expiry
         if self.expiry_date and timezone.now().date() > self.expiry_date:
             self.status = 'Expired'
         else:
@@ -74,9 +79,5 @@ class BloodStock(models.Model):
 
         super().save(*args, **kwargs)
 
-
-
     def __str__(self):
         return f"{self.blood_group} {self.blood_component} - {self.unique_identifier} ({self.status})"
-
-

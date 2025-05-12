@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from app1 import views
 
 
+
 router = DefaultRouter()
 
 
@@ -13,6 +14,8 @@ urlpatterns = [
     path("token/refresh/",TokenRefreshView.as_view()),
     path("register/",views.RegisterView.as_view()),
     path("dashboard/",views.dashboard),
+    path('hospitalprofile/', views.HospitalProfileView.as_view(), name='hospital-profile'),
+
 ]
 
 

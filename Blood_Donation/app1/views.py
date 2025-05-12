@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User,HospitalProfile
-from app1.serializers import UserSerializer,MyTokenObtainPairSerializer,RegisterSerializer
+from app1.serializers import UserSerializer,MyTokenObtainPairSerializer,RegisterSerializer,HospitalProfileSerializer
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 def home(request):
@@ -35,3 +36,14 @@ def dashboard(request):
     return Response({},status==status.HTTP_400_BAD_REQUEST)
 
 
+class HospitalProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            # Assuming each user has only one associated HospitalProfile
+            hospital_profile = HospitalProfile.objects.get(user=request.user)
+            serializer = HospitalProfileSerializer(hospital_profile)
+            return Response(serializer.data)
+        except HospitalProfile.DoesNotExist:
+            return Response({"error": "Hospital profile not found"}, status=404)

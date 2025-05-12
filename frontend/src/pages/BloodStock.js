@@ -16,7 +16,7 @@ const BloodStock = () => {
         storage_location: '',
         price: '',
     });
-
+    const [userID, setUserID] = useState('');
     const isValidCnic = (cnic) => {
     const cnicPattern = /^\d{5}-\d{7}-\d{1}$/;
     return cnicPattern.test(cnic);
@@ -32,7 +32,7 @@ const BloodStock = () => {
     };
 
     const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-    const BLOOD_COMPONENTS = ['Whole Blood', 'Plasma', 'Platelets', 'Red Cells'];
+    const BLOOD_COMPONENTS = ['Whole Blood', 'Plasma', 'Platelets', 'Red Blood Cells'];
 
     // Fetch existing stock
     const fetchBloodStocks = async () => {
@@ -54,37 +54,100 @@ const BloodStock = () => {
     };
 
     const handleAddStock = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        if (!isValidCnic(newStock.donor_cnic)) {
+    if (!isValidCnic(newStock.donor_cnic)) {
         Swal.fire('Invalid CNIC Format!', 'CNIC must be in XXXXX-XXXXXXX-X format.', 'error');
         return;
-        }
-        try {
-            const response = await api.post('/bloodstocks/', newStock);
-            setBloodStocks([...bloodStocks, response.data]);
-            Swal.fire('Blood stock added!', '', 'success');
-            setNewStock({
-                donor_cnic: '',
-                hospital_license: '',
-                blood_group: '',
-                blood_component: '',
-                blood_test_result: '',
-                collection_date: '',
-                storage_location: '',
-                price: '',
-            });
-        } catch (error) {
-            const errorData = error.response?.data;
-            let message = 'Failed to add stock!';
-            if (errorData && typeof errorData === 'object') {
-                message = Object.entries(errorData)
-                    .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
-                    .join('\n');
+    }
+
+    try {
+        const response = await api.post('/bloodstocks/', newStock);
+        setBloodStocks([...bloodStocks, response.data]);
+        Swal.fire('Blood stock added!', '', 'success');
+        setNewStock({
+            donor_cnic: '',
+            hospital_license: '',
+            blood_group: '',
+            blood_component: '',
+            blood_test_result: '',
+            collection_date: '',
+            storage_location: '',
+            price: '',
+        });
+    } catch (error) {
+        // Check if error has a response data
+        if (error.response && error.response.data) {
+            const errorData = error.response.data;
+
+            // If the backend sends specific errors, show them
+            if (errorData.hospital_license) {
+                Swal.fire('Hospital License Error', errorData.hospital_license[0], 'error');
+            } else {
+                let message = 'Failed to add stock!';
+                if (typeof errorData === 'object') {
+                    message = Object.entries(errorData)
+                        .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
+                        .join('\n');
+                }
+                Swal.fire('Validation Error', message, 'error');
             }
-            Swal.fire('Validation Error', message, 'error');
+        } else {
+            Swal.fire('Error', 'An unknown error occurred.', 'error');
         }
-    };
+    }
+};
+
+const handleUpdateStock = async (e) => {
+    e.preventDefault();
+
+    if (!isValidCnic(newStock.donor_cnic)) {
+        Swal.fire('Invalid CNIC Format!', 'CNIC must be in XXXXX-XXXXXXX-X format.', 'error');
+        return;
+    }
+
+    try {
+        const response = await api.put(`/bloodstocks/${editStock.unique_identifier}/`, newStock);
+        const updatedStocks = bloodStocks.map(stock =>
+            stock.unique_identifier === editStock.unique_identifier ? response.data : stock
+        );
+        setBloodStocks(updatedStocks);
+        setNewStock({
+            donor_cnic: '',
+            hospital_license: '',
+            blood_group: '',
+            blood_component: '',
+            blood_test_result: '',
+            collection_date: '',
+            storage_location: '',
+            price: '',
+        });
+        setEditStock(null);
+        setIsEditing(false);
+        Swal.fire('Stock updated successfully!', '', 'success');
+    } catch (error) {
+        // Check if error has a response data
+        if (error.response && error.response.data) {
+            const errorData = error.response.data;
+
+            // If the backend sends specific errors, show them
+            if (errorData.hospital_license) {
+                Swal.fire('Hospital License Error', errorData.hospital_license[0], 'error');
+            } else {
+                let message = 'Failed to update stock!';
+                if (typeof errorData === 'object') {
+                    message = Object.entries(errorData)
+                        .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
+                        .join('\n');
+                }
+                Swal.fire('Validation Error', message, 'error');
+            }
+        } else {
+            Swal.fire('Error', 'An unknown error occurred.', 'error');
+        }
+    }
+};
+
 
     const handleDeleteStock = async (id) => {
         try {
@@ -95,45 +158,6 @@ const BloodStock = () => {
             console.error('Error deleting stock:', error);
             Swal.fire('Failed to delete!', '', 'error');
         }
-    };
-
-    const handleUpdateStock = async (e) => {
-        e.preventDefault();
-
-        if (!isValidCnic(newStock.donor_cnic)) {
-        Swal.fire('Invalid CNIC Format!', 'CNIC must be in XXXXX-XXXXXXX-X format.', 'error');
-        return;
-        }
-
-        try {
-            const response = await api.put(`/bloodstocks/${editStock.unique_identifier}/`, newStock);
-            const updatedStocks = bloodStocks.map(stock =>
-                stock.unique_identifier === editStock.unique_identifier ? response.data : stock
-            );
-            setBloodStocks(updatedStocks);
-            setNewStock({
-                donor_cnic: '',
-                hospital_license: '',
-                blood_group: '',
-                blood_component: '',
-                blood_test_result: '',
-                collection_date: '',
-                storage_location: '',
-                price: '',
-            });
-            setEditStock(null);
-            setIsEditing(false);
-            Swal.fire('Stock updated successfully!', '', 'success');
-        } catch (error) {
-            const errorData = error.response?.data;
-            let message = 'Failed to update stock!';
-            if (errorData && typeof errorData === 'object') {
-                message = Object.entries(errorData)
-                    .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
-                    .join('\n');
-            }
-            Swal.fire('Validation Error', message, 'error');
-            }
     };
 
     return (
